@@ -18,6 +18,11 @@ axios():
 
 Remember that fetch() and axios() both return Promises.
 This means that when utilizing them, we should implement proper techniques for handling Promises.
+
+In this example we are using the Dog API.
+Documentation is here: https://dog.ceo/dog-api/
+NOTE: The documentation shows what the response data is going to look like.
+Understanding its structure is important so that we can properly handle the data.
 */
 
 
@@ -62,3 +67,32 @@ async function getRandomDogImage() {
 
 // Call the function
 getRandomDogImage();
+
+
+/*
+BONUS EXAMPLE: Utilizing method #2 (async/await) to display the image in an HTML file in the web browser.
+This method gets called by the button in our index.html file as we're binding it to the button's onClick() attribute there.
+In the () of onClick() we specify this function name, to ensure this function runs when the button is clicked.
+*/
+async function getAndDisplayRandomDogImage() {
+    try {
+        const response = await fetch('https://dog.ceo/api/breeds/image/random');
+
+        // If response is not ok, throw an error to be caught in the catch() block.
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status:  ${response.status}`);
+        }
+
+        // Parse the JSON response.
+        const data = await response.json();
+
+        // Log the random dog image to the console.
+        console.log('Random dog image: ', data.message);
+
+        // Here, we retrieve the image element by its id 'dog-image' and we set its src value equal to the 'message' property of our response, which is a dog image URL.
+        document.getElementById("dog-image").src = data.message;
+    } catch (error) {
+        // Handle any errors that occur during the fetch operation.
+        console.log(error);
+    }
+}
